@@ -1,0 +1,122 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "fi.jasoft.plugin:gradle-vaadin-plugin:${vaadinGradlePluginVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootPluginVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:${ioSpringGradlePluginVersion}"
+    }
+}
+
+allprojects {
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url = "http://maven.vaadin.com/vaadin-addons"}
+        maven { url "http://repo.spring.io/libs-snapshot" }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'fi.jasoft.plugin.vaadin'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "io.spring.platform:platform-bom:${springBomVersion}"
+            mavenBom "com.vaadin:vaadin-bom:${vaadinBomVersion}"
+        }
+        dependencies {
+            dependency("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
+            dependency("javax.validation:validation-api:1.0.0.GA")
+        }
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    eclipse {
+        classpath {
+            downloadJavadoc = true
+            downloadSources=true
+        }
+    }
+
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file("$buildDir/classes/main/")
+            jdkName = '1.8'
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    eclipseJdt.onlyIf { false }
+    cleanEclipseJdt.onlyIf { false }
+
+    dependencies {
+        compileOnly 'javax.validation:validation-api:1.0.0.GA'
+        testCompile 'junit:junit'
+    }
+
+}
+
+project('vaadin-addon') {
+
+    apply plugin: 'maven'
+
+    artifacts {
+        archives jar
+    }
+
+    vaadin {
+        addon {
+          author 'basakpie'
+          license 'Apache 2.0'
+          title 'PropertyTable'
+        }
+    }
+
+    task createAddonPom {
+        pom { artifactId = 'propertytable' }.writeTo(
+            "${sourceSets.main.output.resourcesDir}/META-INF/maven/server/propertytable/pom.xml"
+        )
+    }
+
+    jar {
+        baseName = 'propertytable'
+        dependsOn createAddonPom
+        sourceSets.main.java.srcDirs.each {from it }
+    }
+
+}
+
+project('vaadin-demo') {
+
+    apply plugin: 'spring-boot'  
+    apply plugin: 'eclipse-wtp'
+    apply plugin: 'war'
+
+    springBoot {  
+        mainClass = 'com.example.demo.Application'
+    }
+
+    bootRun.dependsOn 'vaadinCompile', 'vaadinThemeCompile'
+
+    dependencies {
+        compile project(":vaadin-addon")
+        compile 'com.vaadin:vaadin-spring-boot-starter'
+        compile 'javax.validation:validation-api:1.1.0.Final'
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+}
+
+

@@ -1,0 +1,27 @@
+=  Building Spring Boot Vaadin applications with Gradle 
+
+## Building and running demo
+
+[source,groovy,indent=0]
+----
+gradlew clean build
+gradlew vaadin-demo:bootRun
+----
+
+Demo Server : http://127.0.0.1:8080
+
+== Building from source
+
+requires Java SE 1.7+
+
+requires Gradle 3.+
+
+requires Vaadin 7.+
+
+requires SpringBoot 1.+
+
+== License & Author
+
+Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
+
+
