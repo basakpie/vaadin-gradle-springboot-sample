@@ -104,6 +104,10 @@ project('vaadin-demo') {
         mainClass = 'com.example.demo.Application'
     }
 
+    idea {
+        sourceSets.main.resources.srcDir  'src/main/webapp'
+    }
+
     bootRun.dependsOn 'vaadinCompile', 'vaadinThemeCompile'
 
     dependencies {
