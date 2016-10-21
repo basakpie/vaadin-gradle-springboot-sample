@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-allprojects {
+subprojects {
 
     repositories {
         mavenLocal()
@@ -32,6 +32,7 @@ allprojects {
         }
         dependencies {
             dependency("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
+            dependency("org.hibernate:hibernate-validator:4.3.1.Final")
             dependency("javax.validation:validation-api:1.0.0.GA")
         }
     }
@@ -50,8 +51,6 @@ allprojects {
 
     idea {
         module {
-            inheritOutputDirs = false
-            outputDir = file("$buildDir/classes/main/")
             jdkName = '1.8'
             downloadJavadoc = true
             downloadSources = true
@@ -62,7 +61,6 @@ allprojects {
     cleanEclipseJdt.onlyIf { false }
 
     dependencies {
-        compileOnly 'javax.validation:validation-api:1.0.0.GA'
         testCompile 'junit:junit'
     }
 
@@ -100,9 +98,7 @@ project('vaadin-addon') {
 
 project('vaadin-demo') {
 
-    apply plugin: 'spring-boot'  
-    apply plugin: 'eclipse-wtp'
-    apply plugin: 'war'
+    apply plugin: 'spring-boot'
 
     springBoot {  
         mainClass = 'com.example.demo.Application'
@@ -113,7 +109,6 @@ project('vaadin-demo') {
     dependencies {
         compile project(":vaadin-addon")
         compile 'com.vaadin:vaadin-spring-boot-starter'
-        compile 'javax.validation:validation-api:1.1.0.Final'
         testCompile 'org.springframework.boot:spring-boot-starter-test'
     }
 
