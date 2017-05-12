@@ -2,10 +2,20 @@
 
 ## Building and running demo
 
+Linux/Mac
+
 [source,groovy,indent=0]
 ----
-gradlew clean build
-gradlew vaadin-demo:bootRun
+sh gradlew clean build
+sh gradlew vaadin-demo:bootRun
+----
+
+Windows
+
+[source,groovy,indent=0]
+----
+gradlew.bat clean build
+gradlew.bat vaadin-demo:bootRun
 ----
 
 Demo Server : http://127.0.0.1:8080
