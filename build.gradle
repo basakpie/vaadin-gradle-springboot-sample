@@ -94,6 +94,11 @@ project('vaadin-addon') {
         sourceSets.main.java.srcDirs.each {from it }
     }
 
+    dependencies {
+        compile 'com.vaadin:vaadin-server'
+        compileOnly 'com.vaadin:vaadin-client'
+    }
+
 }
 
 project('vaadin-demo') {
