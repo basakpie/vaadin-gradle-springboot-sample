@@ -29,9 +29,3 @@ requires Gradle 3.+
 requires Vaadin 7.+
 
 requires SpringBoot 1.+
-
-== License & Author
-
-Apache License 2.0. For license terms, see LICENSE.txt.
-
-
